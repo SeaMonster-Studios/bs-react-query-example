@@ -12,6 +12,9 @@
     "module": "commonjs",
     "in-source": true
   },
+  "ppx-flag": [
+    "./node_modules/@jsiebern/bs-material-ui-ppx/ppx"
+  ],
   "suffix": ".bs.js",
   "bs-dependencies": [
     "reason-react",
