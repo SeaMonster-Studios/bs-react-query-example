@@ -9,7 +9,8 @@ type post = {
   id: string,
   title: string,
   body: string,
-  authorId: string,
+  createdAt: string,
+  userId: string,
 };
 
 [@decco]
@@ -49,7 +50,7 @@ let make = () => {
        ->Array.map(post =>
            <React.Fragment key={post.id}>
              {switch (
-                users->Array.getBy(u => u.id == post.authorId),
+                users->Array.getBy(u => u.id == post.userId),
                 users->Array.get(0),
               ) {
               | (_, None)
@@ -57,7 +58,11 @@ let make = () => {
               | (Some(author), Some(authedUser)) =>
                 <Card
                   author
-                  footer={<AddCommentForm postId={post.id} authedUser />}>
+                  footer=
+                    {<>
+                       <AddCommentForm postId={post.id} authedUser />
+                       <Comments postId={post.id} />
+                     </>}>
                   post.body->React.string
                 </Card>
               }}

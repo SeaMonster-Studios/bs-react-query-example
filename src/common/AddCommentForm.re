@@ -1,7 +1,8 @@
 module Style = {
   open Css;
 
-  let commentBtnContainer = [textAlign(`right)]->style;
+  let commentBtnContainer =
+    [textAlign(`right), marginBottom(15->px)]->style;
 
   let formContainer = [display(`flex), flexDirection(`column)]->style;
 
@@ -58,8 +59,10 @@ let make = (~postId, ~authedUser: Users.user) => {
                  Comments.{
                    postId,
                    body: comment,
-                   authorId: authedUser.id,
+                   userId: authedUser.id,
                    id: "",
+                   createdAt: "",
+                   user: None,
                  },
                )
                ->ignore

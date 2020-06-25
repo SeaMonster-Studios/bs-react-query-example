@@ -1,9 +1,13 @@
+open Belt;
+
 [@decco]
 type comment = {
   id: string,
   postId: string,
   body: string,
-  authorId: string,
+  userId: string,
+  createdAt: string,
+  user: option(Users.user),
 };
 
 [@decco]
@@ -13,15 +17,14 @@ module Queries = {
   module Query = {
     include ReactQuery.Query({
       type key = string;
-      type data = Belt.Result.t(comments, Decco.decodeError);
+      type data = Result.t(comments, Decco.decodeError);
       type vars = unit;
     });
 
-    let getEndpoint = postId => {j|/api/comments/?postId=$postId|j};
+    let getEndpoint = postId => {j|/api/comments/?_expand=user&postId=$postId&_sort=createdAt&_order=desc|j};
 
     let use = (postId: option(string)) => {
-      use(
-        ~key=postId->Belt.Option.map(postId => postId->getEndpoint), (key, _) =>
+      use(~key=postId->Option.map(postId => postId->getEndpoint), (key, _) =>
         Js.Promise.(
           Fetch.fetch(key)
           |> then_(Fetch.Response.json)
@@ -33,7 +36,7 @@ module Queries = {
 
   module Create = {
     include ReactQuery.Mutation({
-      type data = Belt.Result.t(comment, Decco.decodeError);
+      type data = Result.t(comment, Decco.decodeError);
       type vars = comment;
     });
 
@@ -53,11 +56,11 @@ module Queries = {
                         comment.postId->Query.getEndpoint, comments =>
                         comments
                         ->Js.Nullable.toOption
-                        ->Belt.Option.mapWithDefault(default, comments =>
+                        ->Option.mapWithDefault(default, comments =>
                             comments->Belt.Result.mapWithDefault(
                               default, comments =>
                               [|comment|]
-                              ->Belt.Array.concat(comments)
+                              ->Array.concat(comments)
                               ->Belt.Result.Ok
                               ->Js.Nullable.return
                             )
@@ -93,5 +96,31 @@ module Queries = {
         )
       );
     };
+  };
+};
+
+[@react.component]
+let make = (~postId) => {
+  let commentsQ = postId->Some->Queries.Query.use;
+
+  switch (commentsQ.status) {
+  | Loading => <Loader />
+  | Error(err) =>
+    err->Js.log;
+    <ErrorMessage />;
+  | Success(Error(err)) =>
+    err->Js.log;
+    <ErrorMessage />;
+  | Success(Ok(comments)) =>
+    comments
+    ->Array.map(comment =>
+        comment.user
+        ->Option.mapWithDefault(
+            <React.Fragment key={comment.id}> React.null </React.Fragment>,
+            author =>
+            <Card author key={comment.id}> comment.body->React.string </Card>
+          )
+      )
+    ->React.array
   };
 };

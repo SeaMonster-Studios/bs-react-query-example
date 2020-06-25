@@ -6,8 +6,8 @@ module Style = {
     [
       padding(60->px),
       display(`flex),
-      alignItems(`center),
       minHeight(100.->vh),
+      marginTop(78->px),
     ]
     ->style;
 };

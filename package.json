@@ -6,7 +6,7 @@
     "clean": "npx bsb -clean-world",
     "dev:webpack": "npx webpack-dev-server --mode=development",
     "dev:bs": "npx bsb -make-world -w",
-    "dev:api": "npx json-server server.js",
+    "dev:api": "npx nodemon server.js",
     "dev": "run-p dev:api dev:bs dev:webpack"
   },
   "keywords": [
@@ -18,6 +18,7 @@
     "bs-platform": "^7.3.2",
     "clean-webpack-plugin": "^3.0.0",
     "html-webpack-plugin": "^4.3.0",
+    "nodemon": "^2.0.4",
     "npm-run-all": "^4.1.5",
     "webpack": "^4.43.0",
     "webpack-cli": "^3.3.12",
