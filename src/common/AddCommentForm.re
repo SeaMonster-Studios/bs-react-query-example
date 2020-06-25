@@ -12,7 +12,7 @@ module Style = {
 let make = (~postId, ~authedUser: Users.user) => {
   let (formIsActive, setFormIsActive) = React.useState(() => false);
   let (comment, setComment) = React.useState(() => "");
-  let (createComment, createCommentQ) = Comments.Queries.useCreate();
+  let (createComment, createCommentQ) = Comments.Queries.Create.use();
 
   React.useEffect2(
     () => {
@@ -55,17 +55,26 @@ let make = (~postId, ~authedUser: Users.user) => {
              color=`Primary
              onClick={_ =>
                createComment(
-                 Comments.{postId, body: comment, authorId: authedUser.id},
+                 Comments.{
+                   postId,
+                   body: comment,
+                   authorId: authedUser.id,
+                   id: "",
+                 },
                )
                ->ignore
              }>
              "Submit"->React.string
            </MaterialUi.Button>
            {switch (createCommentQ.status) {
-            | Loading => <MaterialUi.CircularProgress />
+            | Loading => <Loader />
             | Idle => React.null
-            | Error(_)
-            | Success(Error(_)) => <ErrorMessage />
+            | Error(err) =>
+              err->Js.log;
+              <ErrorMessage />;
+            | Success(Error(err)) =>
+              err->Js.log;
+              <ErrorMessage />;
             | Success(Ok(_)) => React.null
             }}
          </div>

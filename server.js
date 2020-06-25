@@ -24,6 +24,7 @@ module.exports = () => {
       { id: postId, title: faker.name.title(), body: faker.lorem.paragraphs(), authorId: authedUser.id }
     ],
     comments: _.times(5, () => ({
+      id: faker.random.uuid(),
       postId,
       body: faker.lorem.sentences(),
       authorId: users[Math.floor(Math.random() * users.length)].id

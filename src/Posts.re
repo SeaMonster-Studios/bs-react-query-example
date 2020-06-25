@@ -66,7 +66,7 @@ let make = () => {
        ->React.array}
     </div>
   | (Loading, _)
-  | (_, Loading) => <MaterialUi.CircularProgress />
+  | (_, Loading) => <Loader />
   | (Success(Error(err)), _)
   | (_, Success(Error(err))) =>
     Js.log(err);
