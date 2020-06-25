@@ -58,11 +58,15 @@ module Queries = {
                         ->Js.Nullable.toOption
                         ->Option.mapWithDefault(default, comments =>
                             comments->Belt.Result.mapWithDefault(
-                              default, comments =>
-                              [|comment|]
-                              ->Array.concat(comments)
-                              ->Belt.Result.Ok
-                              ->Js.Nullable.return
+                              default,
+                              comments => {
+                                Js.log3("merging...", comments, comment);
+                                [|comment|]
+                                ->Array.concat(comments)
+                                ->Belt.Result.Ok
+                                ->Js.Nullable.return;
+                                // Query.Cache.refetch(~key=comment.postId,())->ignore;
+                              },
                             )
                           )
                       );

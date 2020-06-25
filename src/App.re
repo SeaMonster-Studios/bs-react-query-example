@@ -30,5 +30,6 @@ let make = () => {
     <main className=Style.main>
       <Container maxWidth=Container.MaxWidth.sm> <Posts /> </Container>
     </main>
+    <ReactQueryDevtools />
   </ReactQuery.ConfigProvider>;
 };

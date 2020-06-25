@@ -12,7 +12,7 @@ const makeData = () => {
     avatar: faker.image.avatar()
   };
 
-  const users = _.times(4, () => ({
+  const users = _.times(20, () => ({
     id: faker.random.uuid(),
     name: `${faker.name.firstName()} ${faker.name.lastName()},`,
     avatar: faker.image.avatar()
