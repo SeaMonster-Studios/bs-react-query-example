@@ -15,16 +15,18 @@ module.exports = () => {
     avatar: faker.image.avatar()
   }));
 
+  let postId = faker.random.uuid();
+
 
   const data = {
     users: [authedUser, ...users],
     posts: [
-      { id: 1, title: faker.name.title(), body: faker.lorem.paragraphs(), authorId: authedUser.id }
+      { id: postId, title: faker.name.title(), body: faker.lorem.paragraphs(), authorId: authedUser.id }
     ],
     comments: _.times(5, () => ({
-      postId: 1,
+      postId,
       body: faker.lorem.sentences(),
-      authorId: users[Math.floor(Math.random() * users.length)]
+      authorId: users[Math.floor(Math.random() * users.length)].id
     }))
   }
   return data

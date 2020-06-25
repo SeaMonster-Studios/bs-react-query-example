@@ -12,13 +12,18 @@
     "module": "commonjs",
     "in-source": true
   },
-  "ppx-flag": [
-    "./node_modules/@jsiebern/bs-material-ui-ppx/ppx"
+  "ppx-flags": [
+    "decco/ppx"
   ],
   "suffix": ".bs.js",
   "bs-dependencies": [
+    "decco",
     "reason-react",
-    "@seamonster-studios/bs-react-query"
+    "bs-css-emotion",
+    "bs-css",
+    "@seamonster-studios/bs-react-query",
+    "@jsiebern/bs-material-ui",
+    "bs-fetch"
   ],
   "warnings": {
     "error": "+101"
