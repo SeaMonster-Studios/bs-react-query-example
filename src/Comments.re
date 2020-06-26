@@ -40,7 +40,7 @@ module Queries = {
       type vars = comment;
     });
 
-    let use = () => {
+    let use = authedUser => {
       use(
         ~options=
           Options.(
@@ -50,6 +50,7 @@ module Queries = {
                   data->Belt.Result.mapWithDefault(
                     (),
                     comment => {
+                      let comment = {...comment, user: authedUser->Some};
                       let default =
                         [|comment|]->Belt.Result.Ok->Js.Nullable.return;
                       Query.Cache.setData(
@@ -58,16 +59,12 @@ module Queries = {
                         ->Js.Nullable.toOption
                         ->Option.mapWithDefault(default, comments =>
                             comments->Belt.Result.mapWithDefault(
-                              default,
-                              comments => {
-                                Js.log3("merging...", comments, comment);
-                                [|comment|]
-                                ->Array.concat(comments)
-                                ->Belt.Result.Ok
-                                ->Js.Nullable.return;
-                                // Query.Cache.refetch(~key=comment.postId,())->ignore;
-                              },
-                            )
+                              default, comments => {
+                              [|comment|]
+                              ->Array.concat(comments)
+                              ->Belt.Result.Ok
+                              ->Js.Nullable.return
+                            })
                           )
                       );
                     },
@@ -106,7 +103,6 @@ module Queries = {
 [@react.component]
 let make = (~postId) => {
   let commentsQ = postId->Some->Queries.Query.use;
-
   switch (commentsQ.status) {
   | Loading => <Loader />
   | Error(err) =>

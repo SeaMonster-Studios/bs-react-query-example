@@ -51,7 +51,7 @@ let make = () => {
            <React.Fragment key={post.id}>
              {switch (
                 users->Array.getBy(u => u.id == post.userId),
-                users->Array.get(0),
+                users->Array.get(1),
               ) {
               | (_, None)
               | (None, _) => <ErrorMessage />

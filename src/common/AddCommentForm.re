@@ -13,12 +13,15 @@ module Style = {
 let make = (~postId, ~authedUser: Users.user) => {
   let (formIsActive, setFormIsActive) = React.useState(() => false);
   let (comment, setComment) = React.useState(() => "");
-  let (createComment, createCommentQ) = Comments.Queries.Create.use();
+  let (createComment, createCommentQ) =
+    Comments.Queries.Create.use(authedUser);
 
   React.useEffect2(
     () => {
       switch (createCommentQ.status) {
-      | Success(Ok(_)) => setFormIsActive(_ => false)
+      | Success(Ok(_)) =>
+        setFormIsActive(_ => false);
+        setComment(_ => "");
       | _ => ()
       };
       None;
