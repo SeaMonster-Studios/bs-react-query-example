@@ -1,5 +1,5 @@
 {
-  "name": "rfjs-react-query",
+  "name": "bs-react-query-example",
   "version": "0.1.0",
   "scripts": {
     "build": "npx bsb -make-world",
